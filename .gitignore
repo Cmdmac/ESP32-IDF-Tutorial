@@ -1,3 +1,6 @@
+sdkconfig.old
+.clangd
+managed_components
 .DS_Store
 .vscode
 build

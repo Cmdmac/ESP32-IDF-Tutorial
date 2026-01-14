@@ -1,0 +1,20 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.espIdfPath": "/Users/meizu/esp/v5.5.1/esp-idf",
+  "idf.pythonInstallPath": "/Users/meizu/miniconda3/bin/python",
+  "idf.espAdfPath": "/Users/meizu/.espressif/esp-adf",
+  "idf.openOcdConfigs": [
+    "board/esp32s3-builtin.cfg"
+  ],
+  "idf.port": "/dev/tty.Bluetooth-Incoming-Port",
+  "idf.toolsPath": "/Users/meizu/.espressif",
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32s3"
+  },
+  "clangd.path": "/Users/meizu/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--query-driver=/Users/meizu/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20241119/xtensa-esp-elf/bin/xtensa-esp32s3-elf-gcc",
+    "--compile-commands-dir=${workspaceFolder}/build"
+  ]
+}

@@ -145,7 +145,7 @@ void gpio_interrupt_init(void)
     io_conf.mode = GPIO_MODE_INPUT;         // 配置为输入模式
     io_conf.pin_bit_mask = (1ULL << KEY_INTERUPT_GPIO_PIN);  // 选中要配置的 GPIO 引脚
     io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;  // 禁用下拉电阻
-    io_conf.pull_up_en = GPIO_PULLUP_ENABLE;       // 启用上拉电阻（按键另一端接 GND）
+    io_conf.pull_up_en = GPIO_PULLUP_DISABLE;       // 启用上拉电阻（按键另一端接 GND）
 
     // 3. 应用 GPIO 配置（生效）
     esp_err_t ret = gpio_config(&io_conf);

@@ -112,8 +112,7 @@ void led_blink_task()
 }
 
 
-// 全局信号量（用于中断与任务间的同步，避免在中断上下文执行耗时操作）
-SemaphoreHandle_t key_semaphore = NULL;
+bool isPressed = false;
 
 /**
  * @brief  GPIO 中断回调函数（中断上下文，需简洁高效，禁止耗时操作）
@@ -123,13 +122,7 @@ SemaphoreHandle_t key_semaphore = NULL;
  */
 static void gpio_isr_handler(void *arg)
 {
-    // 给信号量发通知，唤醒任务处理具体逻辑
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    if (key_semaphore != NULL) {
-        xSemaphoreGiveFromISR(key_semaphore, &xHigherPriorityTaskWoken);
-        // 若唤醒了更高优先级的任务，触发任务切换
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-    }
+    isPressed = true;
 }
 
 /**
@@ -164,12 +157,6 @@ void gpio_interrupt_init(void)
         return;
     }
 
-    // 6. 创建二值信号量（用于中断与任务同步）
-    key_semaphore = xSemaphoreCreateBinary();
-    if (key_semaphore == NULL) {
-        ESP_LOGE(TAG, "信号量创建失败");
-        return;
-    }
 
     ESP_LOGI(TAG, "GPIO 中断模式初始化完成，引脚：%d（下降沿触发）", KEY_INTERUPT_GPIO_PIN);
 }
@@ -181,7 +168,7 @@ void key_interrupt_task(void *arg)
 {
     while (1) {
         // 1. 等待信号量（无限等待，直到中断触发）
-        if (xSemaphoreTake(key_semaphore, portMAX_DELAY) == pdTRUE) {
+        if (isPressed) {
             // 2. 处理按键逻辑（此处可添加消抖、功能执行等操作）
             ESP_LOGI(TAG, "检测到按键中断，执行按键处理逻辑");
             
@@ -192,6 +179,7 @@ void key_interrupt_task(void *arg)
             if (gpio_get_level(KEY_INTERUPT_GPIO_PIN) == 0) {
                 ESP_LOGI(TAG, "按键确认按下，执行具体功能");
             }
+
         }
     }
 }
